@@ -32,9 +32,9 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest \
-            ./${{ matrix.service }}
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/devopscicdpipeline-${{ matrix.service }}:latest \
+            ./devopscicdpipeline-${{ matrix.service }}
 
       - name: Push Docker image
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/devopscicdpipeline-${{ matrix.service }}:latest
