@@ -9,45 +9,78 @@ jobs:
   test-and-build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        service:
-          - frontend
-          - backend
-
-    defaults:
-      run:
-        working-directory: ./${{ matrix.service }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      # =====================
+      # FRONTEND
+      # =====================
+
+      - name: Setup Node.js (Frontend)
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install dependencies
+      - name: Install dependencies (Frontend)
+        working-directory: ./frontend
         run: npm install
 
-      - name: Run lint
+      - name: Run lint (Frontend only)
+        working-directory: ./frontend
         run: npm run lint
 
-      - name: Run npm audit
+      - name: Run npm audit (Frontend)
+        working-directory: ./frontend
         run: npm audit --audit-level=high
 
-      - name: Run tests
+      - name: Run tests (Frontend)
+        working-directory: ./frontend
         run: npm test
 
-      - name: Install Snyk
+      - name: Install Snyk (Frontend)
+        working-directory: ./frontend
         run: npm install -g snyk
 
-      - name: Run Snyk security scan
+      - name: Run Snyk security scan (Frontend)
+        working-directory: ./frontend
         run: snyk test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ matrix.service }}:dev .
+      - name: Build Docker image (Frontend)
+        run: docker build -t frontend:dev ./frontend
+
+      # =====================
+      # BACKEND
+      # =====================
+
+      - name: Setup Node.js (Backend)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies (Backend)
+        working-directory: ./backend
+        run: npm install
+
+      - name: Run npm audit (Backend)
+        working-directory: ./backend
+        run: npm audit --audit-level=high
+
+      - name: Run tests (Backend)
+        working-directory: ./backend
+        run: npm test
+
+      - name: Install Snyk (Backend)
+        working-directory: ./backend
+        run: npm install -g snyk
+
+      - name: Run Snyk security scan (Backend)
+        working-directory: ./backend
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Build Docker image (Backend)
+        run: docker build -t backend:dev ./backend
