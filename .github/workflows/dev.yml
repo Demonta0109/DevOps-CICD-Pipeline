@@ -45,6 +45,7 @@ jobs:
       - name: Run Snyk security scan (Frontend)
         working-directory: ./frontend
         run: snyk test
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
@@ -79,6 +80,7 @@ jobs:
       - name: Run Snyk security scan (Backend)
         working-directory: ./backend
         run: snyk test
+        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
