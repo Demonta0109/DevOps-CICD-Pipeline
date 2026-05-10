@@ -9,7 +9,7 @@ app.use(cors());
 app.get('/api/message', (req, res) => {
   const envVariable = process.env.APP_SECRET_NAME;
   console.log(envVariable);
-  res.json({ message: 'Hello from the backend! the secret value is ' + envVariable });
+  res.json({ message: 'Hello from the backend! How is the feature branch doing ? By the way, the secret value is ' + envVariable });
 });
 
 app.listen(port, () => {
